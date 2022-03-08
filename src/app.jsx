@@ -173,7 +173,7 @@ request.interceptors.request.use((url, options) => {
     console.log('user sign in!!!')
     return {
       url: url,
-      options: { ...options }
+      options: { ...options ,}
     }
   } else {
     // request with cookies except the login in request
@@ -182,7 +182,7 @@ request.interceptors.request.use((url, options) => {
       options: {
         ...options,
         headers:{
-          Authorization:'Bearer'
+          Authorization:'Bearer',
         },
         credentials: 'include',
       }
