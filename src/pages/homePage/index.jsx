@@ -4,12 +4,19 @@ import { CrownOutlined, UserOutlined, SmileOutlined } from '@ant-design/icons';
 import { Layout, Breadcrumb } from 'antd';
 import 'antd/dist/antd.css';
 import './index.less';
-import style from './index.less'
+import styles from './index.less'
 import { history } from 'umi'
+import { Carousel } from 'antd';
 
 
 const { Header, Content, Footer } = Layout;
-
+const contentStyle = {
+    height: '200px',
+    color: '#fff',
+    lineHeight: '160px',
+    textAlign: 'center',
+    background: '#364d79',
+};
 const defaultProps = {
     routes: [
         {
@@ -44,7 +51,7 @@ const homePage = () => {
 
     return (
         <>
-            <Layout className="layout">
+            <Layout className={styles.layout}>
                 {/* <PageHeader
                     className="site-page-header"
                     title="Title"
@@ -55,17 +62,39 @@ const homePage = () => {
                     ]}
                 >
                 </PageHeader> */}
-                <Header className="site-layout-header1" style={{ padding: 0, background: 'white' }}>
-                    <Space align='center'>
-                        <Button onClick={() => {
+                <Header className={styles.site_layout_header1} style={{ padding: 0, background: 'white' }}>
+                    <div style={{ float: 'right', height: '48px', lineHeight: '48px', padding: '0 10px' }}>
+                        <Button className={styles.site_login_button} onClick={() => {
                             history.push('/user/login')
                         }}>
                             Login in
                         </Button>
-                    </Space>
+                    </div>
+                    <div style={{ float: 'right', height: '48px', width: '300px', lineHeight: '43px', padding: '0 10px' }}>
+                        <Input.Search
+                            key="search"
+                            style={{
+                                width: '250px',
+                                verticalAlign: 'middle',
+                            }}
+                        />
+                    </div>
                 </Header>
-
-                <Header className="site-layout-header2" style={{ padding: 0, background: 'white' }}>
+                <Carousel autoplay>
+                    <div>
+                        <h3 style={contentStyle}>1</h3>
+                    </div>
+                    <div>
+                        <h3 style={contentStyle}>2</h3>
+                    </div>
+                    <div>
+                        <h3 style={contentStyle}>3</h3>
+                    </div>
+                    <div>
+                        <h3 style={contentStyle}>4</h3>
+                    </div>
+                </Carousel>
+                <Header className={styles.site_layout_header2} style={{ padding: 0, background: 'white' }}>
                     {/* <div className={style.header_div}>
                         <Space align="center" size={'small'}>
                             <Input.Search
@@ -85,13 +114,13 @@ const homePage = () => {
                     </Menu>
                 </Header>
 
-                <Content style={{ padding: '0 0px' }}>
+                <Content style={{ padding: '0 0px' ,margin:'20px'}}>
                     {/* <Breadcrumb style={{ margin: '16px 0' }}>
                         <Breadcrumb.Item>Home</Breadcrumb.Item>
                         <Breadcrumb.Item>List</Breadcrumb.Item>
                         <Breadcrumb.Item>App</Breadcrumb.Item>
                     </Breadcrumb> */}
-                    <div className="site-layout-content">Content</div>
+                    <div className={styles.site_layout_content}>Content</div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
             </Layout>

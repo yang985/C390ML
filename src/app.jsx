@@ -8,15 +8,18 @@ import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
+const guestPath = [  //without authoritation  for guests...
+  {path:'/homePage'},
+]
 /** 获取用户信息比较慢的时候会展示一个 loading */
-let access = ''
+// let access = ''
 
-const getAccess = () => {
-  return access
-}
-const setAccess = (a) => {
-  access = a;
-}
+// const getAccess = () => {
+//   return access
+// }
+// const setAccess = (a) => {
+//   access = a;
+// }
 
 export const initialStateConfig = {
   loading: <PageLoading />,
@@ -32,16 +35,28 @@ export async function getInitialState() {
       console.log(msg)
       return msg.data;
     } catch (error) {
-      console.log('error detected')
+      console.log(error)
       history.push(loginPath);
     }
 
     return undefined;
   };
   // 如果是登录页面，不执行
+  const doesNeedALogin = (path) =>{
 
-  if (history.location.pathname !== loginPath) {
+    guestPath.map((item,index)=>{
+      console.log(item)
+      if (path === item.path){
+        return false
+      }
+    })
+    return true
+  }
+  console.log(doesNeedALogin(guestPath))
+
+  if (history.location.pathname !== loginPath && doesNeedALogin(history.location.pathname)) {
     const currentUser = await fetchUserInfo();
+    console.log(currentUser)
     return {
       fetchUserInfo,
       currentUser,
@@ -90,6 +105,7 @@ export const layout = ({ initialState }) => {
     //   if (initialState.loading) return <PageLoading />;
     //   return children;
     // },
+    layout:'top',
     ...initialState?.settings,
   };
 };
@@ -157,7 +173,7 @@ request.interceptors.request.use((url, options) => {
     console.log('user sign in!!!')
     return {
       url: url,
-      options: { ...options }
+      options: { ...options ,}
     }
   } else {
     // request with cookies except the login in request
@@ -166,7 +182,7 @@ request.interceptors.request.use((url, options) => {
       options: {
         ...options,
         headers:{
-          Authorization:'Bearer'
+          Authorization:'Bearer',
         },
         credentials: 'include',
       }
