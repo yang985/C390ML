@@ -18,7 +18,7 @@ export async function currentUser() {
 /** 退出登录接口 POST /api/login/outLogin */
 
 export async function outLogin(options) {
-  return request('/api/login/outLogin', {
+  return request('http://localhost:8000/users/logout/', {
     method: 'POST',
     ...(options || {}),
   });
