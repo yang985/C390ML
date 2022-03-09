@@ -30,6 +30,7 @@ const Login = () => {
   const [userLoginState, setUserLoginState] = useState({});
   const [type, setType] = useState('account');
   const { initialState, setInitialState } = useModel('@@initialState');
+
   console.log('initialState fro login in', initialState )
   const intl = useIntl();
 
