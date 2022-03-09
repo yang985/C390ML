@@ -347,10 +347,26 @@ export default defineConfig({
       ]
     },
     {
+      path: '/',
+      name: 'Home',
+      // icon: 'smile',
+      redirect:'/homePage'
+    },
+    {
       path: '/welcome',
       name: 'welcome',
       icon: 'smile',
       component: './Welcome',
+    },
+    {
+      path:'/project/allProject',
+      name:'Explore',
+      component: './projectList/allProject',
+    },
+    {
+      path:'/project/myProject',
+      name:'My Project & Create',
+      component: './projectList/myProject',
     },
     {
       path: '/admin',
@@ -369,12 +385,6 @@ export default defineConfig({
           component: './404',
         },
       ],
-    },
-    {
-      name: 'list.table-list',
-      icon: 'table',
-      path: '/list',
-      component: './TableList',
     },
     {
       path: '/',

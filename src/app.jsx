@@ -4,22 +4,9 @@ import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
-
-
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
-const guestPath = [  //without authoritation  for guests...
-  {path:'/homePage'},
-]
 /** 获取用户信息比较慢的时候会展示一个 loading */
-// let access = ''
-
-// const getAccess = () => {
-//   return access
-// }
-// const setAccess = (a) => {
-//   access = a;
-// }
 
 export const initialStateConfig = {
   loading: <PageLoading />,
@@ -28,35 +15,38 @@ export const initialStateConfig = {
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
 
+
+// guest path list 
+const guestPath = [  //pages without authoritation  for guests...
+  { path: '/homePage' },
+  { path: '/' },
+  { path: loginPath }
+]
+const thisPathDontNeedLogin = (path) => {
+
+  // map() return a new list 
+  for (var i = 0; i < guestPath.length; i++) {
+    if (guestPath[i].path === path) {
+      return true
+    }
+  }
+  return false
+}
+
 export async function getInitialState() {
   const fetchUserInfo = async () => {
     try {
       const msg = await queryCurrentUser();
-      console.log(msg)
       return msg.data;
     } catch (error) {
-      console.log(error)
       history.push(loginPath);
     }
 
     return undefined;
-  };
-  // 如果是登录页面，不执行
-  const doesNeedALogin = (path) =>{
+  }; // 如果是登录页面，不执行
 
-    guestPath.map((item,index)=>{
-      console.log(item)
-      if (path === item.path){
-        return false
-      }
-    })
-    return true
-  }
-  console.log(doesNeedALogin(guestPath))
-
-  if (history.location.pathname !== loginPath && doesNeedALogin(history.location.pathname)) {
+  if (history.location.pathname !== loginPath && !thisPathDontNeedLogin(history.location.pathname)) {
     const currentUser = await fetchUserInfo();
-    console.log(currentUser)
     return {
       fetchUserInfo,
       currentUser,
@@ -75,46 +65,40 @@ export const layout = ({ initialState }) => {
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     waterMarkProps: {
-      content: initialState?.currentUser?.username,
+      // content: initialState?.currentUser?.name,
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history; // 如果没有登录，重定向到 login
 
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
+      if (!initialState?.currentUser && location.pathname !== loginPath && !thisPathDontNeedLogin(location.pathname)) {
+        console.log('user didnt login')
         history.push(loginPath);
       }
     },
-    // links: isDev
-    //   ? [
-    //     <Link to="/umi/plugin/openapi" target="_blank">
-    //       <LinkOutlined />
-    //       <span>OpenAPI 文档</span>
-    //     </Link>,
-    //     <Link to="/~docs">
-    //       <BookOutlined />
-    //       <span>业务组件文档</span>
-    //     </Link>,
-    //   ]
-    //   : [],
+    links: isDev
+      ? [
+          <Link to="/umi/plugin/openapi" target="_blank">
+            <LinkOutlined />
+            <span>OpenAPI 文档</span>
+          </Link>,
+          <Link to="/~docs">
+            <BookOutlined />
+            <span>业务组件文档</span>
+          </Link>,
+        ]
+      : [],
     menuHeaderRender: undefined,
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
-    // 增加一个 loading 的状态
-    // childrenRender: (children) => {
-    //   if (initialState.loading) return <PageLoading />;
-    //   return children;
-    // },
-    layout:'top',
     ...initialState?.settings,
+    layout:'top',
   };
 };
 
 
-/**
- * request 网络请求工具
- * 更详细的 api 文档: https://github.com/umijs/umi-request
- */
+
+
 import { notification } from 'antd';
 import { extend } from 'umi-request';
 
@@ -173,7 +157,7 @@ request.interceptors.request.use((url, options) => {
     console.log('user sign in!!!')
     return {
       url: url,
-      options: { ...options ,}
+      options: { ...options }
     }
   } else {
     // request with cookies except the login in request
@@ -182,7 +166,7 @@ request.interceptors.request.use((url, options) => {
       options: {
         ...options,
         headers:{
-          Authorization:'Bearer',
+          Authorization:'Bearer'
         },
         credentials: 'include',
       }

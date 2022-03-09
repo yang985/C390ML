@@ -11,14 +11,14 @@ import {request}  from 'umi';
 //   });
 // }
 export async function currentUser() {
-  return request('http://localhost:8000/users/getUserInfo/', {
+  return request('/users/getUserInfo/', {
     method: 'POST',
   });
 }
 /** 退出登录接口 POST /api/login/outLogin */
 
 export async function outLogin(options) {
-  return request('http://localhost:8000/users/logout/', {
+  return request('/users/logout/', {
     method: 'POST',
     ...(options || {}),
   });
@@ -36,7 +36,7 @@ export async function outLogin(options) {
 //   });
 // }
 export async function login(body, options) {
-  return request('http://localhost:8000/users/signin/', {
+  return request('/users/signin/', {
     method: 'POST',
     data: {...body},
   });

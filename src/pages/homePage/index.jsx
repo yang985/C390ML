@@ -7,7 +7,8 @@ import './index.less';
 import styles from './index.less'
 import { history } from 'umi'
 import { Carousel } from 'antd';
-
+import AvatarDropdown from '@/components/RightContent/AvatarDropdown';
+import { initial } from 'lodash';
 
 const { Header, Content, Footer } = Layout;
 const contentStyle = {
@@ -64,11 +65,12 @@ const homePage = () => {
                 </PageHeader> */}
                 <Header className={styles.site_layout_header1} style={{ padding: 0, background: 'white' }}>
                     <div style={{ float: 'right', height: '48px', lineHeight: '48px', padding: '0 10px' }}>
-                        <Button className={styles.site_login_button} onClick={() => {
-                            history.push('/user/login')
-                        }}>
-                            Login in
-                        </Button>
+                        {true ?
+                            (<Button className={styles.site_login_button} onClick={() => {
+                                history.push('/user/login')
+                            }}>
+                                Login in
+                            </Button>) : (<AvatarDropdown />)}
                     </div>
                     <div style={{ float: 'right', height: '48px', width: '300px', lineHeight: '43px', padding: '0 10px' }}>
                         <Input.Search
@@ -114,7 +116,7 @@ const homePage = () => {
                     </Menu>
                 </Header>
 
-                <Content style={{ padding: '0 0px' ,margin:'20px'}}>
+                <Content style={{ padding: '0 0px', margin: '20px' }}>
                     {/* <Breadcrumb style={{ margin: '16px 0' }}>
                         <Breadcrumb.Item>Home</Breadcrumb.Item>
                         <Breadcrumb.Item>List</Breadcrumb.Item>

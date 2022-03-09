@@ -12,6 +12,9 @@ import { outLogin } from '@/services/ant-design-pro/api';
  */
 const loginOut = async () => {
   await outLogin();
+  // change isLogin in localstorage to handle some identity authorization
+  localStorage.removeItem('isLogin')
+
   const { query = {}, pathname } = history.location;
   const { redirect } = query; // Note: There may be security issues, please note
 
