@@ -31,15 +31,13 @@ const Login = () => {
   const [type, setType] = useState('account');
   const { initialState, setInitialState } = useModel('@@initialState');
 
-  console.log('initialState fro login in', initialState )
+  console.log('initialState fro login in', initialState)
   const intl = useIntl();
 
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
-    console.log('user info ',userInfo)
-    if (userInfo) {
-      await setInitialState((s) => ({ ...s, currentUser: userInfo }));
-    }
+    console.log('user info ', userInfo)
+    await setInitialState((s) => ({ ...s, currentUser: userInfo }));
   };
 
   const handleSubmit = async (values) => {

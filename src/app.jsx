@@ -4,6 +4,8 @@ import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
+import { message } from 'antd';
+
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 /** 获取用户信息比较慢的时候会展示一个 loading */
@@ -17,7 +19,7 @@ export const initialStateConfig = {
 
 
 // guest path list 
-const guestPath = [  //pages without authoritation  for guests...
+const guestPath = [  //pages(first level)  without authoritation  for guests...
   { path: '/homePage' },
   { path: '/' },
   { path: loginPath }
@@ -26,7 +28,10 @@ const thisPathDontNeedLogin = (path) => {
 
   // map() return a new list 
   for (var i = 0; i < guestPath.length; i++) {
-    if (guestPath[i].path === path) {
+    let pathStr = path.split('/')
+    let guestPStr = guestPath[i].path.split('/')
+    console.log(pathStr,guestPStr)
+    if (pathStr[1] === guestPStr[1]) {
       return true
     }
   }
@@ -34,31 +39,22 @@ const thisPathDontNeedLogin = (path) => {
 }
 
 export async function getInitialState() {
+
   const fetchUserInfo = async () => {
-    try {
-      const msg = await queryCurrentUser();
-      return msg.data;
-    } catch (error) {
-      history.push(loginPath);
-    }
 
-    return undefined;
-  }; // 如果是登录页面，不执行
+    const msg = await queryCurrentUser();
 
-  if (history.location.pathname !== loginPath && !thisPathDontNeedLogin(history.location.pathname)) {
-    const currentUser = await fetchUserInfo();
-    return {
-      fetchUserInfo,
-      currentUser,
-      settings: {},
-    };
+    return msg.data;
   }
 
+  const currentUser = await fetchUserInfo();
   return {
     fetchUserInfo,
+    currentUser,
     settings: {},
   };
-} // ProLayout 支持的api https://procomponents.ant.design/components/layout
+}
+// ProLayout 支持的api https://procomponents.ant.design/components/layout
 
 export const layout = ({ initialState }) => {
   return {
@@ -70,29 +66,27 @@ export const layout = ({ initialState }) => {
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history; // 如果没有登录，重定向到 login
+      console.log('page changing')
+      console.log(initialState)
+      console.log(location.pathname)
+      console.log(!initialState?.currentUser?.isLogin)
+      console.log(location.pathname !== loginPath)
+      console.log('this path dont need a login',thisPathDontNeedLogin(location.pathname))
 
-      if (!initialState?.currentUser && location.pathname !== loginPath && !thisPathDontNeedLogin(location.pathname)) {
+      if (!initialState?.currentUser?.isLogin  && !thisPathDontNeedLogin(location.pathname)) {
         console.log('user didnt login')
+        message.error('Please login first !!!')
         history.push(loginPath);
       }
     },
     links: isDev
-      ? [
-          <Link to="/umi/plugin/openapi" target="_blank">
-            <LinkOutlined />
-            <span>OpenAPI 文档</span>
-          </Link>,
-          <Link to="/~docs">
-            <BookOutlined />
-            <span>业务组件文档</span>
-          </Link>,
-        ]
+      ? []
       : [],
     menuHeaderRender: undefined,
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
     ...initialState?.settings,
-    layout:'top',
+    layout: 'top',
   };
 };
 
@@ -145,7 +139,7 @@ const errorHandler = (error) => {
 
 const request = extend({
   errorHandler,
-  credentials:'include',
+  credentials: 'include',
 })
 
 
@@ -165,8 +159,8 @@ request.interceptors.request.use((url, options) => {
       url: url,
       options: {
         ...options,
-        headers:{
-          Authorization:'Bearer'
+        headers: {
+          Authorization: 'Bearer'
         },
         credentials: 'include',
       }

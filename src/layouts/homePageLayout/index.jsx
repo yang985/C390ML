@@ -10,6 +10,7 @@ import { Carousel } from 'antd';
 import AvatarDropdown from '@/components/RightContent/AvatarDropdown';
 import { useModel } from 'umi'
 
+
 const { Header, Content, Footer } = Layout;
 const contentStyle = {
     height: '200px',
@@ -18,8 +19,37 @@ const contentStyle = {
     textAlign: 'center',
     background: '#364d79',
 };
+const defaultProps = {
+    routes: [
+        {
+            path: '/homePage',
+            name: 'Home',
+            icon: <CrownOutlined />,
+            component: '@/pages/projectList/newProject',
+        },
+        {
+            path: '/homePage/Project',
+            name: 'Projects',
+            icon: <UserOutlined />,
+            component: '@/pages/projectList/allProject',
+        },
+        {
+            path: '/homePage/Create',
+            name: (<a href="/project/myProject">Create</a>),
+            icon: <SmileOutlined />,
+        },
+        {
+            path: '/homePage/About',
+            name: 'About',
+            icon: <SmileOutlined />,
+            component: '@/pages/projectList/allProject',
+        },
+    ],
+};
 
-const homePage = () => {
+
+const homePageLayout = (props) => {
+    console.log(props)
     const { initialState, setInitialState } = useModel('@@initialState');
 
     return (
@@ -81,22 +111,26 @@ const homePage = () => {
                         </Space>
                     </div> */}
                     <Menu style={{}} theme="light" mode="horizontal" defaultSelectedKeys={['Home']}>
-                        {defaultProps.routes.map((item, index) => {
-                            const key = item.name
-                            return (<Menu.Item key={key}>{item.name}</Menu.Item>)
+                        {props.route.routes.map((item, index) => {
+                            return item.name ?
+                                (<Menu.Item key={item.name} onClick={()=>{
+                                    history.push(item.path)
+                                    console.log(item)
+                                }}>
+                                    {item.name}
+                                </Menu.Item>) : ([])
                         })}
                     </Menu>
                 </Header>
 
                 <Content style={{ padding: '0 0px', margin: '20px' }}>
-                    <div className={styles.site_layout_content}>Content</div>
+                    <div className={styles.site_layout_content}>{props.children}</div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
             </Layout>
         </>
     )
+};
 
 
-}
-
-export default homePage
+export default homePageLayout

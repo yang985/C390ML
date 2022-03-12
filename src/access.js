@@ -6,5 +6,6 @@ export default function access(initialState) {
   // console.log(currentUser)
   return {
     canAdmin: currentUser && currentUser.access === 'admin',
+    canUser:currentUser&& currentUser.access ==='user',
   };
 }
