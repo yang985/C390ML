@@ -30,14 +30,14 @@ const Login = () => {
   const [userLoginState, setUserLoginState] = useState({});
   const [type, setType] = useState('account');
   const { initialState, setInitialState } = useModel('@@initialState');
+
+  console.log('initialState fro login in', initialState)
   const intl = useIntl();
 
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
-
-    if (userInfo) {
-      await setInitialState((s) => ({ ...s, currentUser: userInfo }));
-    }
+    console.log('user info ', userInfo)
+    await setInitialState((s) => ({ ...s, currentUser: userInfo }));
   };
 
   const handleSubmit = async (values) => {
@@ -46,7 +46,7 @@ const Login = () => {
       const msg = await login({ ...values, type });
 
       if (msg.status === 'ok') {
-
+        // store isLogin in localstorage to handle some identity authorization
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
@@ -84,7 +84,7 @@ const Login = () => {
       <div className={styles.content}>
         <LoginForm
           // logo={<img alt="logo" src="/logo.svg" />}
-          title="Ant Design"
+          title="Elearn"
           // subTitle={intl.formatMessage({
           //   id: 'pages.layouts.userLayout.title',
           // })}

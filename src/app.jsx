@@ -4,22 +4,11 @@ import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
-
+import { message } from 'antd';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
-const guestPath = [  //without authoritation  for guests...
-  {path:'/homePage'},
-]
 /** 获取用户信息比较慢的时候会展示一个 loading */
-// let access = ''
-
-// const getAccess = () => {
-//   return access
-// }
-// const setAccess = (a) => {
-//   access = a;
-// }
 
 export const initialStateConfig = {
   loading: <PageLoading />,
@@ -28,93 +17,82 @@ export const initialStateConfig = {
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
 
-export async function getInitialState() {
-  const fetchUserInfo = async () => {
-    try {
-      const msg = await queryCurrentUser();
-      console.log(msg)
-      return msg.data;
-    } catch (error) {
-      console.log(error)
-      history.push(loginPath);
+
+// guest path list 
+const guestPath = [  //pages(first level)  without authoritation  for guests...
+  { path: '/homePage' },
+  { path: '/' },
+  { path: loginPath }
+]
+const thisPathDontNeedLogin = (path) => {
+
+  // map() return a new list 
+  for (var i = 0; i < guestPath.length; i++) {
+    let pathStr = path.split('/')
+    let guestPStr = guestPath[i].path.split('/')
+    console.log(pathStr,guestPStr)
+    if (pathStr[1] === guestPStr[1]) {
+      return true
     }
-
-    return undefined;
-  };
-  // 如果是登录页面，不执行
-  const doesNeedALogin = (path) =>{
-
-    guestPath.map((item,index)=>{
-      console.log(item)
-      if (path === item.path){
-        return false
-      }
-    })
-    return true
   }
-  console.log(doesNeedALogin(guestPath))
+  return false
+}
 
-  if (history.location.pathname !== loginPath && doesNeedALogin(history.location.pathname)) {
-    const currentUser = await fetchUserInfo();
-    console.log(currentUser)
-    return {
-      fetchUserInfo,
-      currentUser,
-      settings: {},
-    };
+export async function getInitialState() {
+
+  const fetchUserInfo = async () => {
+
+    const msg = await queryCurrentUser();
+
+    return msg.data;
   }
 
+  const currentUser = await fetchUserInfo();
   return {
     fetchUserInfo,
+    currentUser,
     settings: {},
   };
-} // ProLayout 支持的api https://procomponents.ant.design/components/layout
+}
+// ProLayout 支持的api https://procomponents.ant.design/components/layout
 
 export const layout = ({ initialState }) => {
   return {
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     waterMarkProps: {
-      content: initialState?.currentUser?.username,
+      // content: initialState?.currentUser?.name,
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history; // 如果没有登录，重定向到 login
+      console.log('page changing')
+      console.log(initialState)
+      console.log(location.pathname)
+      console.log(!initialState?.currentUser?.isLogin)
+      console.log(location.pathname !== loginPath)
+      console.log('this path dont need a login',thisPathDontNeedLogin(location.pathname))
 
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
+      if (!initialState?.currentUser?.isLogin  && !thisPathDontNeedLogin(location.pathname)) {
+        console.log('user didnt login')
+        message.error('Please login first !!!')
         history.push(loginPath);
       }
     },
-    // links: isDev
-    //   ? [
-    //     <Link to="/umi/plugin/openapi" target="_blank">
-    //       <LinkOutlined />
-    //       <span>OpenAPI 文档</span>
-    //     </Link>,
-    //     <Link to="/~docs">
-    //       <BookOutlined />
-    //       <span>业务组件文档</span>
-    //     </Link>,
-    //   ]
-    //   : [],
+    links: isDev
+      ? []
+      : [],
     menuHeaderRender: undefined,
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
-    // 增加一个 loading 的状态
-    // childrenRender: (children) => {
-    //   if (initialState.loading) return <PageLoading />;
-    //   return children;
-    // },
-    layout:'top',
     ...initialState?.settings,
+    layout: 'top',
   };
 };
 
 
-/**
- * request 网络请求工具
- * 更详细的 api 文档: https://github.com/umijs/umi-request
- */
+
+
 import { notification } from 'antd';
 import { extend } from 'umi-request';
 
@@ -161,7 +139,7 @@ const errorHandler = (error) => {
 
 const request = extend({
   errorHandler,
-  credentials:'include',
+  credentials: 'include',
 })
 
 
@@ -173,7 +151,7 @@ request.interceptors.request.use((url, options) => {
     console.log('user sign in!!!')
     return {
       url: url,
-      options: { ...options ,}
+      options: { ...options }
     }
   } else {
     // request with cookies except the login in request
@@ -181,8 +159,8 @@ request.interceptors.request.use((url, options) => {
       url: url,
       options: {
         ...options,
-        headers:{
-          Authorization:'Bearer',
+        headers: {
+          Authorization: 'Bearer'
         },
         credentials: 'include',
       }

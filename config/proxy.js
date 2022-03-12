@@ -15,6 +15,13 @@ export default {
         '^': '',
       },
     },
+    '/users/': {
+      target: 'http://localhost:8080',
+      changeOrigin: true,
+      pathRewrite: {
+        '^': '',
+      },
+    },
   },
   test: {
     '/api/': {
