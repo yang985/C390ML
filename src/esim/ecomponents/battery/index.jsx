@@ -9,8 +9,9 @@ export default (props) => {
   const dropped = props.dropped ? props.dropped : false;
   const mouseOver = props.mouseOver ? props.mouseOver : undefined;
   const mouseOut = props.mouseOut ? props.mouseOut : undefined;
-  const mouseDown = props.mouseDown ? props.mouseDown : undefined;
-  const mouseDownForImage = props.mouseDownForImage ? props.mouseDownForImage : undefined;
+  const hideText = props.hideText ? props.hideText : false;
+  // const mouseDown = props.mouseDown ? props.mouseDown : undefined;
+  const componentData = props.getComponentData ? props.getComponentData : undefined;
   // console.log(mouseOver, mouseOut)
   /////////////////////
   const svgStyle = {
@@ -26,10 +27,6 @@ export default (props) => {
     let offset = 0.5 * svgXY - 0.5 * currentXY;
 
     return offset;
-  };
-
-  const checker = (e) => {
-    console.log(e);
   };
 
   return (
@@ -48,7 +45,6 @@ export default (props) => {
           href={battery}
           width={imageStyle.width}
           height={imageStyle.height}
-          onMouseDown={mouseDownForImage}
           style={{
             cursor: dropped ? 'grab' : 'default',
             y: offsetCalculator(svgStyle.height * 0.8, svgStyle.height),
@@ -58,7 +54,7 @@ export default (props) => {
           id="mycircle"
           onMouseOver={mouseOver}
           onMouseOut={mouseOut}
-          onMouseDown={mouseDown}
+          // onMouseDown={mouseDown}
           cx={0.5 * svgStyle.width}
           cy={offsetCalculator(svgStyle.height * 0.8, svgStyle.height) - 5}
           r="4"
@@ -71,7 +67,7 @@ export default (props) => {
           id="mycircle"
           onMouseOver={mouseOver}
           onMouseOut={mouseOut}
-          onMouseDown={mouseDown}
+          // onMouseDown={mouseDown}
           cx={0.5 * svgStyle.width}
           cy={offsetCalculator(svgStyle.height * 0.8, svgStyle.height) + imageStyle.height + 5}
           r="4"
@@ -80,9 +76,13 @@ export default (props) => {
           fill="#ffffff"
           fillOpacity={'1'}
         />
-        <text x={'0'} y={0.5 * svgStyle.height} style={{}}>
-          Battery
-        </text>
+        {!hideText ? (
+          <text x={'0'} y={0.5 * svgStyle.height} style={{}}>
+            Battery
+          </text>
+        ) : (
+          []
+        )}
       </svg>
     </>
   );
