@@ -46,6 +46,11 @@ export default defineConfig({
           component: './user/Login',
         },
         {
+          path: '/user/register',
+          name: 'login',
+          component: './user/register',
+        },
+        {
           component: './404',
         },
 
@@ -58,13 +63,13 @@ export default defineConfig({
       routes: [
         {
           path: '/homePage',
-          redirect: '/homePage/newProject'
+          redirect: '/homePage/allProject'
         },
-        {
-          path: '/homePage/newProject',
-          name: 'Home',
-          component: './projectList/newProject',
-        },
+        // {
+        //   path: '/homePage/newProject',
+        //   name: 'Home',
+        //   component: './projectList/newProject',
+        // },
         {
           path: '/homePage/allProject',
           name: 'Projects',
@@ -72,32 +77,35 @@ export default defineConfig({
         },
         {
           name: 'Create',
+          path:'/admin/create',
+          // redirect:'/admin/create'
         },
-        {
-          path: '/homePage/About',
-          name: 'About',
-          component: './projectList/allProject',
-        },
+        // {
+        //   path: '/homePage/About',
+        //   name: 'About',
+        //   component: './projectList/allProject',
+        // },
         {
           component: './404',
         },
       ]
     },
-    {
-      path: '/welcome',
-      name: 'welcome',
-      icon: 'smile',
-      component: './Welcome',
-    },
+    // {
+    //   path: '/welcome',
+    //   name: 'welcome',
+    //   component: './Welcome',
+    // },
     {
       path: '/project/allProject',
+      icon: 'smile',
       name: 'Explore',
       component: './projectList/allProject',
     },
     {
-      path: '/project/myProject',
-      name: 'My Project & Create',
-      component: './projectList/myProject',
+      path: '/project/:id',
+      name: 'Project View',
+      hideInMenu:true,
+      component: './projectList/projectItem',
     },
     {
       path: '/admin',

@@ -30,7 +30,7 @@ const thisPathDontNeedLogin = (path) => {
   for (var i = 0; i < guestPath.length; i++) {
     let pathStr = path.split('/')
     let guestPStr = guestPath[i].path.split('/')
-    console.log(pathStr,guestPStr)
+    // console.log(pathStr,guestPStr)
     if (pathStr[1] === guestPStr[1]) {
       return true
     }
@@ -66,11 +66,11 @@ export const layout = ({ initialState }) => {
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history; // 如果没有登录，重定向到 login
-      console.log('page changing')
-      console.log(initialState)
-      console.log(location.pathname)
-      console.log(!initialState?.currentUser?.isLogin)
-      console.log(location.pathname !== loginPath)
+      console.log('page changing',history.location.pathname)
+      // console.log(initialState)
+      // console.log(location.pathname)
+      // console.log(!initialState?.currentUser?.isLogin)
+      // console.log(location.pathname !== loginPath)
       console.log('this path dont need a login',thisPathDontNeedLogin(location.pathname))
 
       if (!initialState?.currentUser?.isLogin  && !thisPathDontNeedLogin(location.pathname)) {

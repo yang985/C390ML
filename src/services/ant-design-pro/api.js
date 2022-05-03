@@ -41,6 +41,13 @@ export async function login(body, options) {
     data: {...body},
   });
 }
+
+export async function createNewProduct(body, options) {
+  return request('/products/createNewProduct/', {
+    method: 'POST',
+    data: {...body},
+  });
+}
 /** 此处后端没有提供注释 GET /api/notices */
 
 export async function getNotices(options) {
