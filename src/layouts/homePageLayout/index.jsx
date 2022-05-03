@@ -9,6 +9,7 @@ import { history } from 'umi'
 import { Carousel } from 'antd';
 import AvatarDropdown from '@/components/RightContent/AvatarDropdown';
 import { useModel } from 'umi'
+import { stringify } from 'querystring';
 
 
 const { Header, Content, Footer } = Layout;
@@ -86,16 +87,16 @@ const homePageLayout = (props) => {
                 </Header>
                 <Carousel autoplay>
                     <div>
-                        <h3 style={contentStyle}>1</h3>
+                        <h3 style={contentStyle}><a href={'/project/4'}>Chapter 1.1</a></h3>
                     </div>
                     <div>
-                        <h3 style={contentStyle}>2</h3>
+                        <h3 style={contentStyle}><a href={'/project/5'}>Chapter 1.2</a></h3>
                     </div>
                     <div>
-                        <h3 style={contentStyle}>3</h3>
+                        <h3 style={contentStyle}><a href={'/project/6'}>Chapter 1.3</a></h3>
                     </div>
                     <div>
-                        <h3 style={contentStyle}>4</h3>
+                        <h3 style={contentStyle}><a href={'/project/7'}>Chapter 1.4</a></h3>
                     </div>
                 </Carousel>
                 <Header className={styles.site_layout_header2} style={{ padding: 0, background: 'white' }}>
@@ -110,12 +111,32 @@ const homePageLayout = (props) => {
                             <Button key="1">Login in</Button>
                         </Space>
                     </div> */}
-                    <Menu style={{}} theme="light" mode="horizontal" defaultSelectedKeys={['Home']}>
+                    <Menu style={{}} theme="light" mode="horizontal" defaultSelectedKeys={['Projects']}>
                         {props.route.routes.map((item, index) => {
                             return item.name ?
-                                (<Menu.Item key={item.name} onClick={()=>{
-                                    history.push(item.path)
-                                    console.log(item)
+                                (<Menu.Item key={item.name} onClick={() => {
+                                    // if this route dont have a component to render so it is a link(to back management) !
+                                    if (!item.component) {
+                                        // const { query = {} } = history.location;
+                                        // const pathname = item.path
+                                        // const { redirect } = query; // Note: There may be security issues, please note
+                                        // if (window.location.pathname !== '/user/login' && !redirect) {
+                                        //     console.log('entered', stringify({
+                                        //         redirect: pathname,
+                                        //     }))
+                                        //     history.replace({
+                                        //         pathname: '/user/login',
+                                        //         search: stringify({
+                                        //             redirect: pathname,
+                                        //         }),
+                                        //     });
+                                        // }
+                                        history.push(item.path)
+                                    } else {
+                                        history.push(item.path)
+                                        console.log(item)
+                                    }
+
                                 }}>
                                     {item.name}
                                 </Menu.Item>) : ([])
@@ -123,7 +144,7 @@ const homePageLayout = (props) => {
                     </Menu>
                 </Header>
 
-                <Content style={{ padding: '0 0px', margin: '20px' }}>
+                <Content style={{ padding: '0 0px', margin: '0' }}>
                     <div className={styles.site_layout_content}>{props.children}</div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>

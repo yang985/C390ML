@@ -56,16 +56,16 @@ const homePage = () => {
                 </Header>
                 <Carousel autoplay>
                     <div>
-                        <h3 style={contentStyle}>1</h3>
+                        <h3 href={'/project/4'} style={contentStyle}>Chapter 1.1</h3>
                     </div>
                     <div>
-                        <h3 style={contentStyle}>2</h3>
+                        <h3 href={'/project/5'} style={contentStyle}>Chapter 1.2</h3>
                     </div>
                     <div>
-                        <h3 style={contentStyle}>3</h3>
+                        <h3 href={'/project/6'} style={contentStyle}>Chapter 1.3</h3>
                     </div>
                     <div>
-                        <h3 style={contentStyle}>4</h3>
+                        <h3 href={'/project/7'} style={contentStyle}>Chapter 1.4</h3>
                     </div>
                 </Carousel>
                 <Header className={styles.site_layout_header2} style={{ padding: 0, background: 'white' }}>
@@ -80,9 +80,13 @@ const homePage = () => {
                             <Button key="1">Login in</Button>
                         </Space>
                     </div> */}
-                    <Menu style={{}} theme="light" mode="horizontal" defaultSelectedKeys={['Home']}>
+                    <Menu style={{}} theme="light" mode="horizontal" defaultSelectedKeys={['Projects']}>
                         {defaultProps.routes.map((item, index) => {
                             const key = item.name
+                            if (item.href) {
+                                return (<Menu.Item key={key}><a href={item.href}>{item.name}</a></Menu.Item>)
+                            }
+
                             return (<Menu.Item key={key}>{item.name}</Menu.Item>)
                         })}
                     </Menu>
@@ -91,7 +95,7 @@ const homePage = () => {
                 <Content style={{ padding: '0 0px', margin: '20px' }}>
                     <div className={styles.site_layout_content}>Content</div>
                 </Content>
-                <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+                <Footer style={{ textAlign: 'center' }}>  </Footer>
             </Layout>
         </>
     )

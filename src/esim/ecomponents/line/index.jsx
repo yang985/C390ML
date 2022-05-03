@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 export default (props) => {
-  console.log('lineStyle', props.lineStyle);
 
   const lineStyle = {
     x1: props.lineStyle?.x1 ? props.lineStyle.x1 : 0,
@@ -9,6 +8,7 @@ export default (props) => {
     x2: props.lineStyle?.x2 ? props.lineStyle.x2 : 0,
     y2: props.lineStyle?.y2 ? props.lineStyle.y2 : 0,
   };
+  // console.log('line render',lineStyle)
 
   const getSvgStyle = (option) => {
     let svgWidth = Math.abs(lineStyle.x1 - lineStyle.x2)
@@ -17,21 +17,24 @@ export default (props) => {
     let svgHeight = Math.abs(lineStyle.y1 - lineStyle.y2)
       ? Math.abs(lineStyle.y1 - lineStyle.y2)
       : 5;
-    console.log(svgWidth, svgHeight);
+    // console.log(svgWidth, svgHeight);
     if (option == 'x') {
       return svgWidth;
     } else {
       return svgHeight;
     }
   };
+
   const svgStyle = {
     width: getSvgStyle('x'),
     height: getSvgStyle('y'),
-    // style:props.svgStyle,
+    style:props.svgStyle,
+    className:props.className,
+    key:props.index,
   };
 
   return (
-    <svg {...svgStyle}>
+    <svg {...svgStyle} data-index={props.index}>
       <line {...lineStyle} stroke={'black'} strokeWidth={'2'}></line>
     </svg>
   );

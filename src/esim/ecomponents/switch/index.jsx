@@ -1,4 +1,5 @@
-import battery from '@/esim/ecomponents/icons/battery_48px.png';
+import switchOff from '@/esim/ecomponents/icons/switch_off_80px.png';
+import switchOn from '@/esim/ecomponents/icons/switch_on_80px.png';
 import React, { Component } from 'react';
 
 export default (props) => {
@@ -9,18 +10,15 @@ export default (props) => {
   const mouseOver = props.mouseOver ? props.mouseOver : undefined;
   const mouseOut = props.mouseOut ? props.mouseOut : undefined;
   const hideText = props.hideText ? props.hideText : false;
-  // const mouseDown = props.mouseDown ? props.mouseDown : undefined;
-  const componentData = props.getComponentData ? props.getComponentData : undefined;
-  // console.log(mouseOver, mouseOut)
   /////////////////////
   const svgStyle = {
-    width: '50',
-    height: '100',
+    width: '80',
+    height: '70',
   };
 
   const imageStyle = {
     width: svgStyle.width,
-    height: svgStyle.height * 0.8,
+    height: svgStyle.height * 0.6,
   };
   const offsetCalculator = (currentXY, svgXY) => {
     let offset = 0.5 * svgXY - 0.5 * currentXY;
@@ -35,12 +33,12 @@ export default (props) => {
         height={svgStyle.height}
         style={props.svgStyle}
         //set postion style otherwize it can't move
-        className = {props.className}
+        className={props.className}
         key={props.index}
         data-index={props.index}
       >
         <image
-          href={battery}
+          href={props.switch ? switchOn : switchOff}
           width={imageStyle.width}
           height={imageStyle.height}
           style={{
@@ -56,7 +54,8 @@ export default (props) => {
           onMouseOut={mouseOut}
           // onMouseDown={mouseDown}
           cx={0.5 * svgStyle.width}
-          cy={offsetCalculator(imageStyle.height, svgStyle.height) - 5}
+          cy={offsetCalculator(imageStyle.height, svgStyle.height) + imageStyle.height + 5}
+
           r="4"
           stroke="#000000"
           strokeWidth="1"
@@ -67,11 +66,12 @@ export default (props) => {
           id="mycircle"
           data-index={props.index}
           data-direction={'tail'}
+
           onMouseOver={mouseOver}
           onMouseOut={mouseOut}
           // onMouseDown={mouseDown}
           cx={0.5 * svgStyle.width}
-          cy={offsetCalculator(imageStyle.height, svgStyle.height) + imageStyle.height + 5}
+          cy={offsetCalculator(imageStyle.height, svgStyle.height) - 5}
           r="4"
           stroke="#000000"
           strokeWidth="1"
@@ -80,7 +80,7 @@ export default (props) => {
         />
         {!hideText ? (
           <text x={'0'} y={0.5 * svgStyle.height} style={{}}>
-            Battery
+            Switch
           </text>
         ) : (
           []

@@ -58,7 +58,7 @@ const Login = () => {
         if (!history) return;
         const { query } = history.location;
         const { redirect } = query;
-        history.push(redirect || '/welcome');
+        history.push(redirect || '/project/allProject');
         return;
       }
 
@@ -84,7 +84,7 @@ const Login = () => {
       <div className={styles.content}>
         <LoginForm
           // logo={<img alt="logo" src="/logo.svg" />}
-          title="Elearn"
+          title={<a href='/homePage'>Elearn</a>}
           // subTitle={intl.formatMessage({
           //   id: 'pages.layouts.userLayout.title',
           // })}
@@ -165,10 +165,7 @@ const Login = () => {
                   size: 'large',
                   prefix: <LockOutlined className={styles.prefixIcon} />,
                 }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.password.placeholder',
-                  defaultMessage: '密码: ant.design',
-                })}
+                placeholder={'Password:'}
                 rules={[
                   {
                     required: true,
@@ -281,8 +278,9 @@ const Login = () => {
               style={{
                 float: 'right',
               }}
+              href="/user/register"
             >
-              <FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码" />
+              Join us ?
             </a>
           </div>
         </LoginForm>
