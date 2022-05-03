@@ -4,13 +4,14 @@ This project is initialized with [Ant Design Pro](https://pro.ant.design). Follo
 
 ## Environment Prepare
 
-Install `node_modules`:
+make sure you have nodejs in you environment
 
 ```bash
-npm install
+npm install --global yarn
 ```
 
-or
+Install `node_modules`:
+
 
 ```bash
 yarn
@@ -25,11 +26,9 @@ Scripts provided in `package.json`. It's safe to modify or add additional script
 ### Start project
 
 ```bash
-npm start
-
-or
-
 yarn start
 
 ```
+
+
 
